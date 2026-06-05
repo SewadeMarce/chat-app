@@ -1,14 +1,15 @@
 import compression from "compression";
 import express from "express";
 import morgan from "morgan";
-    // @ts-expect-error - Vite gère l'import, mais TS peut bloquer sur le chemin build
+// @ts-expect-error - Vite gère l'import, mais TS peut bloquer sur le chemin build
 import { PORT } from "./server/config/env.ts";
+// @ts-expect-error
+import { app } from "./server/app.ts";
 // Short-circuit the type-checking of the built output.
 const BUILD_PATH = "./build/server/index.js";
 const DEVELOPMENT = process.env.NODE_ENV === "development";
-//const PORT = Number.parseInt(process.env.PORT || "5000");
 
-const app = express();
+//const app = express();
 
 app.use(compression());
 app.disable("x-powered-by");
