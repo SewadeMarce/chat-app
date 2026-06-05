@@ -1,0 +1,24 @@
+import "react-router";
+import { createRequestHandler } from "@react-router/express";
+import express from "express";
+import { PORT } from "./config/env";
+
+declare module "react-router" {
+  interface AppLoadContext {
+    VALUE_FROM_EXPRESS: string;
+  }
+}
+
+export const app = express();
+
+app.use(
+  createRequestHandler({
+    // @ts-expect-error - Vite gère l'import, mais TS peut bloquer sur le chemin build
+    build: () => import("virtual:react-router/server-build"),
+    getLoadContext() {
+      return {
+        VALUE_FROM_EXPRESS: "Hello from Express",
+      };
+    },
+  }),
+);
