@@ -4,7 +4,7 @@ import morgan from "morgan";
 // @ts-expect-error - Vite gère l'import, mais TS peut bloquer sur le chemin build
 import { PORT } from "./server/config/env.ts";
 // @ts-expect-error
-import { app } from "./server/app.ts";
+import { app, httpServer } from "./server/app.ts";
 // Short-circuit the type-checking of the built output.
 const BUILD_PATH = "./build/server/index.js";
 const DEVELOPMENT = process.env.NODE_ENV === "development";
@@ -44,6 +44,6 @@ if (DEVELOPMENT) {
   app.use(await import(BUILD_PATH).then((mod) => mod.app));
 }
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

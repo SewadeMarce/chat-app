@@ -1,6 +1,9 @@
 import "react-router";
 import { createRequestHandler } from "@react-router/express";
 import express from "express";
+import { createServer } from "http";
+import { Server } from "socket.io";
+
 
 declare module "react-router" {
   interface AppLoadContext {
@@ -8,8 +11,16 @@ declare module "react-router" {
   }
 }
 
-export const app = express();
 
+const app = express();
+const httpServer = createServer(app);
+
+// Initialisation de Socket.io attaché au serveur HTTP
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*", // À restreindre en production pour la sécurité
+  },
+});
 app.use(
   createRequestHandler({
     // @ts-expect-error - Vite gère l'import, mais TS peut bloquer sur le chemin build
@@ -21,3 +32,5 @@ app.use(
     },
   }),
 );
+
+export  {app,httpServer};
