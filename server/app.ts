@@ -1,6 +1,6 @@
 import "react-router";
 import { createRequestHandler } from "@react-router/express";
-import express from "express";
+import { app } from "./config/socket";
 
 declare module "react-router" {
   interface AppLoadContext {
@@ -8,7 +8,7 @@ declare module "react-router" {
   }
 }
 
-export const app = express();
+export { app };
 
 app.use(
   createRequestHandler({
