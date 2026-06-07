@@ -1,21 +1,15 @@
 import compression from "compression";
 import express from "express";
 import morgan from "morgan";
-// @ts-expect-error - Vite gère l'import, mais TS peut bloquer sur le chemin build
-import { PORT } from "./server/config/env.ts";
+import { DEVELOPMENT, PORT } from "./server/config/env.ts";
 import { createServer } from "http";
-import { Server } from "socket.io";
-// Short-circuit the type-checking of the built output.
-const BUILD_PATH = "./build/server/index.js";
-const DEVELOPMENT = process.env.NODE_ENV === "development";
+import { app, server } from "./server/config/socket.ts";
 
-const app = express();
+const BUILD_PATH = "./build/server/index.js";
+
 
 app.use(compression());
 app.disable("x-powered-by");
-const httpServer = createServer(app);
-
-// Initialisation de Socket.io attaché au serveur HTTP
 
 if (DEVELOPMENT) {
   console.log("Starting development server");
@@ -47,6 +41,6 @@ if (DEVELOPMENT) {
   app.use(await import(BUILD_PATH).then((mod) => mod.app));
 }
 
-httpServer.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
